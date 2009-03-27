@@ -23,7 +23,7 @@ public class FindMajors {
 			           + "and dname = '" + major + "'";
 			ResultSet rs = stmt.executeQuery(qry);
 			
-			DisplayQuery dq = new DisplayQuery(d,conn,stmt,qry);
+			DisplayQuery dq = new DisplayQuery("Here are the "+major+" majors",qry);
 			
 			// Step 3: loop through the result set
 			while (rs.next()) {

@@ -9,7 +9,7 @@ package studentClient.simpledb;
  */
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import simpledb.remote.SimpleDriver;
 import java.sql.*;
 import java.util.*;
 
@@ -26,14 +26,16 @@ public class DisplayQuery extends JFrame {
 	JScrollPane pane;
 	DefaultTableModel model;
 	
-	public DisplayQuery(Driver d,Connection conn,Statement stmt,String qry)
+	public DisplayQuery(String message,String qry)
 	{
-		this.d = d;
-		this.conn = conn;
-		this.stmt = stmt;
+		super(message);
 		
-		try
-		{
+		try{
+			
+			this.d = new SimpleDriver();
+			this.conn = d.connect("jdbc:simpledb://localhost", null);
+			this.stmt = conn.createStatement();
+		
 			rs = stmt.executeQuery(qry);
 		}
 		
@@ -43,10 +45,12 @@ public class DisplayQuery extends JFrame {
 		}
 		
 		pane = new JScrollPane();
+		pane.setBounds(30,30,300,300);
 		
-		outputTable = new JTable(new DefaultTableModel());
+		outputTable = new JTable();
 		
 		pane.setViewportView(outputTable);
+		outputTable.setFillsViewportHeight(true);
 		
 		setLayout(null);
 		setBounds(30,30,400,400);
@@ -57,6 +61,8 @@ public class DisplayQuery extends JFrame {
 		generateRecords();
 		
 		setVisible(true);
+		repaint();
+		validate();
 	}
 	
 	public void generateRecords()
@@ -69,15 +75,16 @@ public class DisplayQuery extends JFrame {
 			
 			model = new DefaultTableModel();
 			
-			for(int i=0;i<columns;i++)
-				model.addColumn(rsm.getColumnName(i+1));
+			for(int i=columns;i>0;i--)
+				model.addColumn(rsm.getColumnName(i));
 			
 			while(rs.next())
 			{
-				Vector newRow = new Vector();
+				Vector<Object> newRow = new Vector<Object>();
 				
-				for(int i=1;i<=columns;i++)
-					newRow.addElement(rs.getObject(i));
+			//	for(int i=1;i<=columns;i++)
+					newRow.addElement(rs.getString("sname"));
+					newRow.addElement(rs.getInt("gradyear"));
 				
 				model.addRow(newRow);
 			}
