@@ -22,7 +22,9 @@ public class FindMajors {
 			           + "where did = majorid "
 			           + "and dname = '" + major + "'";
 			ResultSet rs = stmt.executeQuery(qry);
-
+			
+			DisplayQuery dq = new DisplayQuery(d,conn,stmt,qry);
+			
 			// Step 3: loop through the result set
 			while (rs.next()) {
 				String sname = rs.getString("sname");
