@@ -4,7 +4,7 @@
 package studentClient.simpledb;
 
 /**
- * @author Moheb
+ * @author Moheb,Zaher&Nouman
  *
  */
 import javax.swing.*;
